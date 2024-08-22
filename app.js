@@ -1,24 +1,35 @@
-document.addEventListener('DOMContentLoaded', (event) => {
-    // Create the copy button
-    const copyButton = document.createElement('button');
-    copyButton.id = 'copyButton';
-    copyButton.textContent = 'Share';
-    
-    // Append the button to the body (or any other desired element)
-    document.body.appendChild(copyButton);
+document.addEventListener("DOMContentLoaded", (event) => {
+  // Create the copy button
+  const copyButton = document.createElement("button");
+  copyButton.id = "copyButton";
+  copyButton.textContent = "Share";
 
-    // Add the click event listener to the button
-    copyButton.addEventListener('click', function() {
-        // Get the current URL
-        let url = window.location.href;  // Get the current URL
-        showShareContainer();
-        document.querySelector('.share-link input').value = url;
-        document.querySelector('#copy-link-btn').addEventListener('click', copyLink )
+  // Append the button to the body (or any other desired element)
+  document.body.appendChild(copyButton);
+
+  // Add the click event listener to the button
+  copyButton.addEventListener("click", function () {
+    // Get the current URL
+    let url = window.location.href; // Get the current URL
+    showShareContainer();
+    const shareOptionIcons = document.querySelectorAll('.share-option a');
+    shareOptionIcons.forEach(icon => {
+      let tempHref = icon.getAttribute("href");
+      tempHref+=url;
+      icon.setAttribute("href", tempHref);
+      console.log(icon);
     });
+    document.querySelector(".share-link input").value = url;
+    document
+      .querySelector("#copy-link-btn")
+      .addEventListener("click", copyLink);
+  });
+
+  createAlertPopup();
 });
 
 function showShareContainer() {
-    if (!document.getElementById("share-container")) {
+  if (!document.getElementById("share-container")) {
     // Create the show Share popup container if it doesn't exist
     const shareContainer = document.createElement("div");
     shareContainer.id = "share-container";
@@ -33,17 +44,17 @@ function showShareContainer() {
             <div class="line"></div>
             <div class="share-options">
                 <div class="share-option">
-                    <a href="mailto:?subject=Welcome to Voxtra&amp;body=Check out this site http://voxtra.io" target="_blank">
+                    <a href="mailto:?subject=Welcome to Voxtra&amp;body=Check out this site " target="_blank">
                         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24"
                             stroke="white" stroke-width="2">
                             <path d="M3 8l9 6 9-6" stroke-linecap="round" stroke-linejoin="round" />
                             <rect width="20" height="16" x="3" y="5" rx="2" ry="2" />
                         </svg>
                     </a>
-                    <a href="mailto:?subject=Welcome to Voxtra&amp;body=Check out this site http://voxtra.io" target="_blank"><p>Email</p></a>
+                    <a href="mailto:?subject=Welcome to Voxtra&amp;body=Check out this site " target="_blank"><p>Email</p></a>
                 </div>
                 <div class="share-option">
-                    <a href="https://api.whatsapp.com/send/?text=https://voxtra.io/groups/india/activity/" target="_blank">
+                    <a href="https://api.whatsapp.com/send/?text=" target="_blank">
                         <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="40" height="40" viewBox="0 0 48 48">
                             <path fill="#fff"
                                 d="M4.868,43.303l2.694-9.835C5.9,30.59,5.026,27.324,5.027,23.979C5.032,13.514,13.548,5,24.014,5c5.079,0.002,9.845,1.979,13.43,5.566c3.584,3.588,5.558,8.356,5.556,13.428c-0.004,10.465-8.522,18.98-18.986,18.98c-0.001,0,0,0,0,0h-0.008c-3.177-0.001-6.3-0.798-9.073-2.311L4.868,43.303z">
@@ -62,7 +73,7 @@ function showShareContainer() {
                                 clip-rule="evenodd"></path>
                         </svg>
                     </a>
-                    <a href="https://api.whatsapp.com/send/?text=https://voxtra.io/groups/india/activity/" target="_blank"><p>WhatsApp</p></a>
+                    <a href="https://api.whatsapp.com/send/?text=" target="_blank"><p>WhatsApp</p></a>
                 </div>
             </div>
             <div class="share-link">
@@ -70,63 +81,68 @@ function showShareContainer() {
                 <button id="copy-link-btn"">Copy Link</button>
             </div>
         </div>`;
-                    document.body.appendChild(shareContainer);  // Append the popup container to the document
-    } else {
-        document.getElementById("share-container").style.display = "flex";  // Show the popup if it already exists
+    document.body.appendChild(shareContainer); // Append the popup container to the document
+  } else {
+    document.getElementById("share-container").style.display = "flex"; // Show the popup if it already exists
+  }
+
 }
-}
+
 function closeShareContainer() {
-document.getElementById("share-container").style.display = "none"; 
+  document.getElementById("share-container").style.display = "none";
+  closeAlert();
 }
 
 function copyLink() {
-showAlert();
-const copyText = document.querySelector('.share-link input');
-copyText.select();
-document.execCommand('copy'); // Alert or notify the users
-console.log("URL copied to clipboard: " );
-event.preventDefault();
+  showAlert();
+  const copyText = document.querySelector(".share-link input");
+  copyText.select();
+  document.execCommand("copy"); // Alert or notify the users
+  console.log("URL copied to clipboard: ");
+  event.preventDefault();
 }
 
 function showAlert() {
-    showAlertPopup()
-    setTimeout(function() {
-        closeAlert();
-    }, 2000); // Auto close after 3 seconds
+  const alertPopup = document.getElementById("alertPopup");
+  if (alertPopup.style.display === "none") {
+    showAlertPopup();
+    setTimeout(function () {
+      closeAlert();
+    }, 2000); // Auto close after 2 seconds
+  }
 }
 
 function showAlertPopup() {
-    // Create the popup container
-    const alertPopup = document.createElement('div');
-    alertPopup.id = 'alertPopup';
-    alertPopup.style.display = 'block';
+  const alertPopup = document.getElementById("alertPopup");
+  alertPopup.style.display = "block";
+}
 
-    // Create the checkmark icon
-    const checkmarkIcon = document.createElement('i');
-    checkmarkIcon.innerHTML = '&#10004;'; // Checkmark icon
+function createAlertPopup() {
+  // Create the popup container
+  const alertPopup = document.createElement("div");
+  alertPopup.id = "alertPopup";
+  alertPopup.style.display = "none";
+  alertPopup.style.zIndex = "1";
 
-    // Create the message span
-    const messageSpan = document.createElement('span');
-    messageSpan.textContent = 'Copied Link Successfully!';
+  // Create the checkmark icon
+  const checkmarkIcon = document.createElement("i");
+  checkmarkIcon.innerHTML = "&#10004;"; // Checkmark icon
 
-    // Create the close button
-    const closeButton = document.createElement('button');
-    closeButton.className = 'close-btn';
-    closeButton.innerHTML = '&#10005;'; // Close (X) icon
-    closeButton.onclick = closeAlert;
+  // Create the message span
+  const messageSpan = document.createElement("span");
+  messageSpan.textContent = "Link Copied Successfully!";
 
-    // Append the elements to the popup container
-    alertPopup.appendChild(checkmarkIcon);
-    alertPopup.appendChild(messageSpan);
-    alertPopup.appendChild(closeButton);
+  // Append the elements to the popup container
+  alertPopup.appendChild(checkmarkIcon);
+  alertPopup.appendChild(messageSpan);
 
-    // Append the popup container to the body
-    document.body.appendChild(alertPopup);
+  // Append the popup container to the body
+  document.body.appendChild(alertPopup);
 }
 
 function closeAlert() {
-    const alertPopup = document.getElementById('alertPopup');
-    if (alertPopup) {
-        alertPopup.style.display = 'none';
-    }
+  const alertPopup = document.getElementById("alertPopup");
+  if (alertPopup) {
+    alertPopup.style.display = "none";
+  }
 }
